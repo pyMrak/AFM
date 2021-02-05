@@ -12,7 +12,7 @@ from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
 import openpyxl
 from matplotlib import pyplot as plt
-from numpy import array, transpose, linspace
+from numpy import array, where, transpose, linspace
 #from pandas.compat import StringIO
 from io import BytesIO
 
@@ -113,11 +113,14 @@ class TTreportBuilder(object):
                     tableData.append([])
                     for c in range(nCol):
                         data = sheet.cell(row=r+1, column=c+4).value
-                        if data:
+                        if r:
                             tableData[-1].append(data)
                         else:
-                            nCol = c+1
-                            break
+                            if data:
+                                tableData[-1].append(data)
+                            else:
+                                nCol = c
+                                break
             else:
                 break
         book.close()
@@ -149,7 +152,6 @@ class TTreportBuilder(object):
     def createFuncTables(self, document):
         for tableData, group in zip(self.tablesData, self.settings.groups):
             if tableData is not None:
-                #print(tableData)
                 self.createTable(document, tableData[:,:6], title='Tabela s funkcionalnimi karakeristikami skupine '+group+'.')
                 
                 
@@ -203,7 +205,10 @@ class TTreportBuilder(object):
                     else:
                         table.rows[r].cells[c].text = str(round(float(data),2)).replace('.',',')
                 except:
+                    if data is not None:
                         table.rows[r].cells[c].text = str(data)
+                    else:
+                        table.rows[r].cells[c].text = '/'
                 table.rows[r].cells[c]._tc.get_or_add_tcPr().append(tableStyle[r][c])
         document.add_paragraph()
         document.paragraphs[-1].paragraph_format.space_after = 100
@@ -294,74 +299,90 @@ class TTreportBuilder(object):
         groups = []
         for k, tableData in enumerate(self.tablesData):
             if tableData is not None:
-                print(tableData)
                 groups.append(self.settings.groups[k])
                 j += 1
-                data.append(array(tableData[1:,-1], dtype='float64'))
-                colors.append(histColors[i])
-                edgeColors.append(gaussColors[i])
-                if len(data[-1]) < 8:
-                    n_bins = 5
-                else:
-                    n_bins = 7
-                sigma = data[-1].std()
-                mean = data[-1].mean()
-                stats.append([mean, sigma])
-                #plt.hist(data, bins=n_bins, label=group, density=True, color=histColors[i], alpha=0.75,  edgecolor=gaussColors[i], linewidth=1.2)
-                binSpan.append((max(data[-1]) - min(data[-1]))/n_bins)
-                if i == 0:
-                    maxC = max(data[-1])
-                    minC = min(data[-1])
-                else:
-                    if maxC < max(data[-1]):
+                notNoneIdx = where(tableData[1:,-1] != None)[0]
+                if len(notNoneIdx) > 0:
+                    data.append(array(tableData[1:,-1][notNoneIdx], dtype='float64'))
+                    colors.append(histColors[i])
+                    edgeColors.append(gaussColors[i])
+                    if len(data[-1]) < 8:
+                        n_bins = 5
+                    else:
+                        n_bins = 7
+                    #if len(data[-1]) > 0:
+                    sigma = data[-1].std()
+                    mean = data[-1].mean()
+                    binSpan.append((max(data[-1]) - min(data[-1])) / n_bins)
+                    # else:
+                    #     sigma = None
+                    #     mean = None
+                    #     binSpan.append(500)
+                    stats.append([mean, sigma])
+                    #plt.hist(data, bins=n_bins, label=group, density=True, color=histColors[i], alpha=0.75,  edgecolor=gaussColors[i], linewidth=1.2)
+
+                    if i == 0:
                         maxC = max(data[-1])
-                    if minC > min(data[-1]):
                         minC = min(data[-1])
-                i += 1
-                if i >= len(histColors):
-                    i = 0
+                    else:
+                        if maxC < max(data[-1]):
+                            maxC = max(data[-1])
+                        if minC > min(data[-1]):
+                            minC = min(data[-1])
+                    i += 1
+                    if i >= len(histColors):
+                        i = 0
+                else:
+                    data.append(None)
+                    colors.append(None)
+                    edgeColors.append(None)
+                    stats.append([None, None])
+                    binSpan.append(0)
         spanC = maxC - minC
         minX = minC - spanC*0.1
         maxX = maxC + spanC*0.1
         #print(minC, maxC, minX, maxX)
         
         if len(binSpan) > 0:
-            n_bins = int(round(spanC/(sum(binSpan)/len(binSpan)),0))
+            n_bins = int(round(spanC/(sum(binSpan)/len(binSpan)), 0))
         else:
             n_bins = 0
         #print(binSpan, spanC, sum(binSpan)/len(binSpan) , n_bins)
         x = linspace(minX, maxX, 1000)
         
         for i, d in enumerate(data):
-            plt.hist(d, bins=n_bins, label=groups[i], density=True, color=colors[i],
-                     alpha=0.5, range=(minC, maxC), edgecolor=edgeColors[i], linewidth=1.2)
+            if d is not None:
+                plt.hist(d, bins=n_bins, label=groups[i], density=True, color=colors[i],
+                         alpha=0.5, range=(minC, maxC), edgecolor=edgeColors[i], linewidth=1.2)
             
         i = 0
-        for stat in stats: 
-            gauss = norm.pdf(x,stat[0],stat[1])
-            txtYPos = max(gauss)*1.02
-            offset = max(gauss)*0.15
-            plt.plot(x, gauss, color=gaussColors[i])
-            i += 1
-            if i >= len(gaussColors):
-                i = 0
+        for stat in stats:
+            if stat[1] is not None:
+                gauss = norm.pdf(x,stat[0],stat[1])
+                txtYPos = max(gauss)*1.02
+                offset = max(gauss)*0.15
+                plt.plot(x, gauss, color=gaussColors[i])
+                i += 1
+                if i >= len(gaussColors):
+                    i = 0
         i = 0
         for stat in stats:
-            meanTxt = 'mean: '+str(int(round(stat[0], 0)))
-            stdTxt = 'std: '+str(round(stat[1],1))
-            gauss = norm.pdf(x,stat[0],stat[1])
-            yMin, yMax = plt.ylim()
-            ran = yMax - yMin
-            txtYPos = max(gauss)+ran*0.02
-            offset = ran*0.07
-            if txtYPos + 2* offset > yMax:
-                plt.ylim(yMin, txtYPos + 2* offset)
-                yMax = txtYPos + 2* offset
-            plt.text(stat[0], txtYPos+offset, meanTxt, color=fontColors[i])
-            plt.text(stat[0], txtYPos, stdTxt, color=fontColors[i])
-            i += 1
-            if i >= len(fontColors):
-                i = 0
+            if stat[1] is not None:
+                meanTxt = 'mean: '+str(int(round(stat[0], 0)))
+                stdTxt = 'std: '+str(round(stat[1],1))
+                gauss = norm.pdf(x,stat[0],stat[1])
+                yMin, yMax = plt.ylim()
+                ran = yMax - yMin
+                txtYPos = max(gauss)+ran*0.02
+                offset = ran*0.07
+                if txtYPos + 2* offset > yMax:
+                    plt.ylim(yMin, txtYPos + 2* offset)
+                    yMax = txtYPos + 2* offset
+                plt.text(stat[0], txtYPos+offset, meanTxt, color=fontColors[i])
+                plt.text(stat[0], txtYPos, stdTxt, color=fontColors[i])
+                i += 1
+                if i >= len(fontColors):
+                    i = 0
         plt.xlim(minX, maxX)
         plt.legend()
         plt.grid(color='#878787')
@@ -607,8 +628,8 @@ class TTreportSettings(object):
                    break
             #print('setFolder:',self.groups, self.folders)
             self.TTnr = path.split('/')[-1].split('-')[0].strip()
-            self.izvedba = {group : '' for group in self.groups}
-            self.proceduraTT = {group : '' for group in self.groups}
+            self.izvedba = {group: '' for group in self.groups}
+            self.proceduraTT = {group: '' for group in self.groups}
         return self.groups
     
     def setProcedura(self, group, value):
@@ -664,7 +685,7 @@ class TTreportSettings(object):
                 self.messageLogger.writeWarning('Nastavljeni cikli niso naravno število.', self.gdat, False)#print('WARNING!: Nastavljeni cikli niso naravno število.')
         except:
             pass#print('WARNING!: Nastavljeni cikli niso število.')
-        self.cikli = cikli
+        self.cikli = str(cikli)
         
     def setRTGperRow(self, nr):
         self.RTGperRow = nr
