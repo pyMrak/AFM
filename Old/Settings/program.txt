@@ -1,0 +1,4 @@
+//corp.hidria.com/aet/SI-TO-Izmenjava/Andrej_Mrak/Proba
+global
+True
+True

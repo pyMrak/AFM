@@ -1,0 +1,3 @@
+qcpath	//corp.hidria.com/aet/SI-TO-Izmenjava/Andrej_Mrak/__Nove_Meritve/_Reports/GlobalFiles/QC.txt
+izmenjava	//corp.hidria.com/aet/SI-TO-Izmenjava/
+download	//corp.hidria.com/aet/SI-TO-Izmenjava/Andrej_Mrak/AFM

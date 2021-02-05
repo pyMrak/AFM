@@ -1,0 +1,5 @@
+t	t[s]	Èas	t(s)
+U	U[V]	U1(V)	U2(V)	U3(V)	U4(V)	U5(V)	U6(V)
+I	I[A]	Tok	I1(A)	I2(A)	I3(A)	I4(A)	I5(A)	I6(A)
+T	Piro[°C]	Piro[C]	T[°C]	T[C]	T [C]	T (C)	Piro2[C]	T1(°C)	T2(°C)	T3(°C)	T4(°C)	T5(°C)	T6(°C)
+TC	TC-K[°C]	TC[C]	TC[°C]	Piro1[C]	Un1(V)	Un2(V)	Un3(V)	Un4(V)	Un5(V)	Un6(V)

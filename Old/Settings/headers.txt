@@ -1,0 +1,5 @@
+T	Piro[°C]	Piro[C]	T[°C]	T[C]
+U	U[V]
+TC	TC-K[°C]	TC[C]	TC[°C]	
+I	I[A]
+t	t[s]	Èas
