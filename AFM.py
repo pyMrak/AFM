@@ -16,9 +16,10 @@ from sys import argv
 
 
 
-version = 'ver2_3'
+version = 'ver2_4'
 app = QApplication(argv)
 alowed, online = Permission.check(version)
+log = None
 if alowed:
     program = GUI.Main(version, online, None)
     #log = login.Login()
@@ -27,7 +28,7 @@ if alowed:
         #program = GUI.Main(version, online, login.logMod)
 
 else:
-    zapisi = newLog(version)
+    zapisi = newLog(version, log)
     zapisi.writeLocation('Not alowed ', version)
     GUI.permissionError(app, 'Verzija ' + version.replace('_', '.').strip('ver') +
                         ' je zastarela ali pa nimate dostopa do mreže.\nNove verzije so dostopne na '+

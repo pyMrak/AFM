@@ -13,9 +13,9 @@ class newLog():
     characters = 'abcčdefghijklmnoprstuvzžqxywABCČDEFGHIJKLMNOPRSŠTUVZŽQXYW1234567890.:_'
     code = 'IN)hn43098jOIJDJĆ()#z98jhd=ZwdEFF7t542wabxa987%ESG809#SXffm097ds83GERXkd.yhq6mammd%/(amxykjDEWh9908<H/FN9090DNkAKoLKJND&6zdcb76fGZGDS6zgdj(/Gdb8wh(&D"Ghslmcbbvz75/$Dfcvghsjmuw56f2hjLDvkw62ftxujHBkcxbk(/&"&Egikxbwi6)984tgh9bnn)/TF(GIJKASNC(#GGh)/InidbduwdGSHAuhd6%VshjkWtsjMFIa76IUHD/&GEDhdusodjn5rqghajDSVX4r8da29ak>jsz(&TGFHBD876gf94,.ZFDGo4gDv8chSo'
     
-    def __init__(self, ver, login):
+    def __init__(self, ver, login=None):
         #print(login)
-        if login:
+        if login is not None:
             self.localUsername = login.username
         else:
             self.localUsername = 'Debug'
