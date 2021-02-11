@@ -111,7 +111,10 @@ class messageLogger():
         logFile.close()
         if isMD:
             app = app.gdat
-        app.statusBar().showMessage('Progress INFO: '+msg)
+        try:
+            app.statusBar().showMessage('Progress INFO: '+msg)
+        except:
+            print('Progress INFO: '+msg)
         
     def writeWarning(self, msg, app, isMD=True):
         logFile = open(self.fileName, 'a', encoding="utf-8")
@@ -119,7 +122,10 @@ class messageLogger():
         logFile.close()
         if isMD:
             app = app.gdat
-        app.statusBar().showMessage('!WARNING!: '+msg)
+        try:
+            app.statusBar().showMessage('!WARNING!: '+msg)
+        except:
+            print('Progress INFO: '+msg)
         
     def writeError(self, msg, app, isMD=True):
         logFile = open(self.fileName, 'a', encoding="utf-8")
@@ -127,7 +133,10 @@ class messageLogger():
         logFile.close()
         if isMD:
             app = app.gdat
-        app.statusBar().showMessage('!!!ERROR!!!: '+msg)
+        try:
+            app.statusBar().showMessage('!!!ERROR!!!: '+msg)
+        except:
+            print('Progress INFO: '+msg)
         
     def append(self, msg, app, isMD=True):
         logFile = open(self.fileName, 'a', encoding="utf-8")
@@ -135,7 +144,10 @@ class messageLogger():
         logFile.close()
         if isMD:
             app = app.gdat
-        app.statusBar().showMessage(self.readLog())
+        try:
+            app.statusBar().showMessage(self.readLog())
+        except:
+            print('Progress INFO: '+msg)
         
         
     def readLog(self):

@@ -65,7 +65,7 @@ def read_txt(file_name, gdat, path='',delimiter='.',maxlines=6502):
             break
         #line=line.strip('\n')
         if delimiter==',':
-            line=line.replace(',','.')
+            line=line.replace(',','.').strip('\n')
         line=split(r'\t+', line)
         llen=len(line)
         for i in range(llen):

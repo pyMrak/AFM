@@ -8,14 +8,14 @@ Created on Thu Jan 12 07:39:29 2017
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
-from openpyxl.styles import  PatternFill, Color#, Style, Font
+from openpyxl.styles import PatternFill, Color#, Style, Font
 #from openpyxl.styles.differential import DifferentialStyle
 from openpyxl.formatting.rule import CellIsRule
 from openpyxl.chart import  Reference, ScatterChart, Series #, LineChart
 #from openpyxl.chart.layout import Layout, ManualLayout
 from openpyxl.drawing.image import Image
 from traceback import print_exception
-from sys import  exc_info
+from sys import exc_info
 
 from libs import read_data as rd
 from libs import data_eval as de
@@ -321,7 +321,7 @@ def write_graph(gdat, graph_nr=1, Curr=False):
                     chart = ScatterChart()
                     chart1 = ScatterChart()
                     chart1.y_axis.axId = 200
-                    chart1.title = gdat.filenames[i*10+j].strip('.txt')
+                    chart1.title = gdat.filenames[i*10+j].split('.', 1)[0]
                     
                     #title = gdat.filenames[i*10+j].strip('.txt')
                     cpt = CharacterProperties(sz=int(gdat.graphSett.tfG*100))
@@ -511,9 +511,9 @@ def table_head(gdat):
 
 def table_data(gdat,line,wsh,tMer,tcol,Tcol,Ucol,Icol,TCcol,TCc, worksheet):
     try:
-        gdat.ws[0][gdat.columns[3]+str(line)]=int(gdat.filenames[line-2].strip('.txt'))
+        gdat.ws[0][gdat.columns[3]+str(line)]=int(gdat.filenames[line-2].split('.', 1)[0])
     except:
-        gdat.ws[0][gdat.columns[3]+str(line)]=gdat.filenames[line-2].strip('.txt')
+        gdat.ws[0][gdat.columns[3]+str(line)]=gdat.filenames[line-2].split('.', 1)[0]#.strip('.txt')
     i = 1
     while True:
         i += 1
@@ -579,6 +579,7 @@ def write_table(gdat):
 #                        if gdat.ws[worksheet][Tcol+str(3+i)].value>TtR:
 #                            gdat.ws[0][gdat.columns[2]+str(line)]='='+wsh+tcol+str(i)
 #                            break
+
                 elif gdat.ws[worksheet][gdat.columns[column]+'2'].value in header.TC:#'TC-K[°C]' or gdat.ws[worksheet][gdat.columns[column]+'2'].value=='TC[C]' or gdat.ws[worksheet][gdat.columns[column]+'2'].value=='TC[°C]':
                     TCcol=gdat.columns[column]
                     

@@ -6,15 +6,45 @@ Created on Thu Jan 12 07:40:41 2017
 """
 from libs import read_data as rd
 from math import ceil
+import re
+
+def atof(text):
+    try:
+        retval = float(text)
+    except ValueError:
+        retval = text
+    return retval
+
+def natural_keys(text):
+    '''
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    float regex comes from https://stackoverflow.com/a/12643073/190597
+    '''
+    return [atof(c) for c in re.split(r'[+-]?([0-9]+(?:[.][0-9]*)?|[.][0-9]+)', text)]
 
 def rearrange_up(lis):
+    if lis is not None:
+        temp = []
+        for item in lis:
+            temp.append(item.split('.', 1)[0].replace(',', '.'))
+        lis = temp
+        lis.sort(key=natural_keys)
+        return lis
+    else:
+        print('there')
+        return []
+    """
     temp=[]
+    print(lis)
     for item in lis:
         try:
             temp.append(item.strip('.txt'))
         except:
             temp.append(item.strip('.txt'))
     lis=temp
+    print(lis)
     
     intNr = []
     for item in lis:
@@ -53,6 +83,7 @@ def rearrange_up(lis):
         except:
             lis.append(item)
     return lis
+    """
     
 def transform_to_write(gdat):
     lis=gdat.data

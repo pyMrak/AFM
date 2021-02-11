@@ -93,6 +93,8 @@ class debug():
         self.nastavitveA.R=R
         self.nastavitveA.fname=folder
         self.nastavitveA.maxlines = maxlines
+        self.nastavitveA.TT = False
+
         self.nastavitveP.QCpath = QCpath
         
     def setTCdata(self, order_nr='', ProductionDate='', nomVoltage='5V', gp_nr='', author='', TCnr = 1):
