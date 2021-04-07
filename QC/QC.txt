@@ -43,43 +43,43 @@ max:520
 
 
 QC
-<5011-721-230>
+<t800C>
 
 <Ttr>
-950
+800
 </Ttr>
 
 <tTtr>
 min:
-max:3
+max:25
 </tTtr>
 
 <Tmax>
 min:
-max:1120
+max:
 </Tmax>
 
 <T60>
-min:970
-max:1070
+min:850
+max:950
 </T60>
 
 <Imax>
 min:
-max:26
+max:5.5
 </Imax>
 
 <I60>
 min:
-max:8
+max:
 </I60>
 
 <R>
-min:440
-max:560
+min:
+max:
 </R>
 
-<GM-230>
+<t800C>
 
 
 
@@ -168,3 +168,58 @@ max:380
 </R>
 
 <JMC-282>
+
+QC
+<Kubota 11V>
+
+
+
+<Ttr>
+800
+</Ttr>
+
+
+
+<tTtr>
+min:
+max:6
+</tTtr>
+
+
+
+<Tmax>
+min:
+max:1120
+</Tmax>
+
+
+
+<T60>
+min:960
+max:1060
+</T60>
+
+
+
+<Imax>
+min:
+max:12
+</Imax>
+
+
+
+<I60>
+min:4
+max:6
+</I60>
+
+
+
+<R>
+min:
+max:
+</R>
+
+
+
+<Kubota 11V>

@@ -56,38 +56,38 @@ def read_txt(file_name, gdat, path='',delimiter='.',maxlines=6502):
         Clines = file.readlines()
         #content.encode('latin-1').decode("utf-8")
     #Clines = content.split('\n')    
-    lines=[]
-    count=0
-    maxlines=maxlines-1
+    lines = []
+    count = 0
+    maxlines = maxlines-1
     for line in Clines:
-        if count>maxlines:
+        if count > maxlines:
             #count=0
             break
         #line=line.strip('\n')
-        if delimiter==',':
-            line=line.replace(',','.').strip('\n')
-        line=split(r'\t+', line)
-        llen=len(line)
+        if delimiter == ',':
+            line = line.replace(',', '.').strip('\n')
+        line = split(r'\t+', line)
+        llen = len(line)
         for i in range(llen):
             if i == 0:
                 if ':' in line[i]:
                     t = line[i].split(':')
                     line[i] = 0
                     for k, tu in enumerate(t):
-                        line[i] += float(tu.replace(',','.'))*60**(2-k)
-                    line[i] = round(line[i],2)
+                        line[i] += float(tu.replace(',', '.'))*60**(2-k)
+                    line[i] = round(line[i], 2)
                 else:
                     try:
-                        line[i]=round(float(line[i]),2)
+                        line[i] = round(float(line[i]), 2)
                     except:
                         line[i] = 't[s]'
             else:
                 try:
-                    line[i]=round(float(line[i]),3)
+                    line[i] = round(float(line[i]), 3)
                 except:
                     pass
         while len(line) < 5:
-            line.append(0)
+            line.append(None)
         lines.append(line)
         count+=1
     dt = 0.01
@@ -96,7 +96,7 @@ def read_txt(file_name, gdat, path='',delimiter='.',maxlines=6502):
     for i in range(maxlines-len(lines)+1):
         if i == 0:
             ml.writeWarning('Datoteka ' + file_name+'.txt dne vsebuje dovolj vrstic. Št. vrstic nastavljeno na '+ str(maxlines)+'.', gdat, isMD=False)
-        lines.append([float(line[0]) + Dt]+[0]*(llen-1))
+        lines.append([float(line[0]) + Dt]+[None]*4)
         Dt += dt
     return lines
     

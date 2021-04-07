@@ -10,9 +10,7 @@ from libs.logger import messageLogger
 
 def checkForDataErrors(gdat, path):
     ml = messageLogger()
-    #print('datalen:', len(gdat.data))
     for m, meas in enumerate(gdat.data):
-        #print('started', m)
         mStart = False
         mCount = 0
         startT = []
@@ -20,25 +18,27 @@ def checkForDataErrors(gdat, path):
         average = []
         size = getsize(path+gdat.filenames[m]+'.txt')
         for i, Volt in enumerate([item[1] for item in meas][1:-1:10]):
-            Volt = float(Volt)
-            if Volt > 1 and not mStart:
-                mStart = True
-                mStTime = i
-                startT.append(float(meas[i*10+1][3]))
-                mCount += 1
-                avg = 0
-            if mStart:
-                if Volt < 1:
-                    durTime.append(i-mStTime)
-                    mStart = False
-                    average.append(avg / durTime[-1])
-                else:
-                    avg += Volt
+            if Volt is not None:
+                Volt = float(Volt)
+                if Volt > 1 and not mStart:
+                    mStart = True
+                    mStTime = i
+                    startT.append(float(meas[i*10+1][3]))
+                    mCount += 1
+                    avg = 0
+                if mStart:
+                    if Volt < 1:
+                        durTime.append(i-mStTime)
+                        mStart = False
+                        average.append(avg / durTime[-1])
+                    else:
+                        avg += Volt
         if mStart:
             for j, Volt in enumerate([item[1] for item in meas][-20:-1]):
-                if Volt < 1:
-                    durTime.append(gdat.MeasDur*10-20+j-mStTime)
-                    mStart = False
+                if Volt is not None:
+                    if Volt < 1:
+                        durTime.append(gdat.MeasDur*10-20+j-mStTime)
+                        mStart = False
         if mStart:
             durTime.append(gdat.maxlines/10-mStTime)
         average.append(avg / (i-mStTime))
@@ -56,13 +56,10 @@ def checkForDataErrors(gdat, path):
         else:
             if durTime[0] < gdat.MeasDur*10-5:
                 ml.writeWarning('Neptipična meritev zaznana: '+ gdat.filenames[m]+'je krajša od pričakovanega.', gdat)
-                #print(durTime[0], gdat.MeasDur)
-            
             if average[0] < 4:
                 ml.writeWarning('Neptipična meritev zaznana: '+gdat.filenames[m]+' ima netipični profil napetosti.', gdat)
             if startT[0] > 710:
                 ml.writeWarning('Neptipična meritev zaznana: ' +gdat.filenames[m]+' ima začetno temperaturo previsoko.', gdat)
-        #print('ended', m)
 
       
 def findMeasStart(measurements):
