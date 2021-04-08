@@ -92,14 +92,13 @@ def saveDefFolder(folder):
        
        
 def saveSettings(nr, newLine, username):
-    file = open(globalPaths.path.settings+username+'.set', 'a', encoding="utf-8")
-    #lines = file.readlines()
-    #file.close()
-    #lines[nr] = newLine + '\n'
-    file.write(newLine + '\n')
-#    file = open(globalPaths.path.settings+username+'.set', 'w')
-#    for line in lines:
-#        file.write(line)
+    file = open(globalPaths.path.settings+username+'.set', 'r', encoding="utf-8")
+    lines = file.readlines()
+    file.close()
+    lines[nr] = newLine + '\n'
+    file = open(globalPaths.path.settings+username+'.set', 'w', encoding="utf-8")
+    for line in lines:
+        file.write(line)
     file.close()
     
     
