@@ -6,32 +6,22 @@ Created on Tue Jan 21 15:36:02 2020
 """
 import hashlib, binascii, os
 from datetime import datetime
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import padding
-#from Crypto.Cipher import PKCS1_OAEP
-#from Crypto.PublicKey import RSA
-from binascii import hexlify
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
 import sqlite3
 from sqlite3 import Error
 from PyQt5 import QtWidgets, QtGui
-# from mainwindow import Ui_MainWindow
 
 
 from libs.globalPaths import path
 
-#from Crypto.Cipher import AES
-#from Crypto import Random
+
 
 class loginModule(object):
     
     def __init__(self):
-        with open(path.encryption+'private_pem.pem', 'r', encoding="utf-8") as key_file:
-            self.decrypt = serialization.load_pem_private_key(key_file.read(),
-                                                              password=None)
-
-        #pr_key = RSA.import_key(open(path.encryption+'private_pem.pem', 'r', encoding="utf-8").read())
-        #self.decrypt = PKCS1_OAEP.new(key=pr_key)
+        pr_key = RSA.import_key(open(path.encryption+'private_pem.pem', 'r', encoding="utf-8").read())
+        self.decrypt = PKCS1_OAEP.new(key=pr_key)
         self.username = ''
         self.userType = 'normal'
 
@@ -53,29 +43,12 @@ class loginModule(object):
                                       salt.encode('ascii'), 
                                       100000)
         pwdhash = binascii.hexlify(pwdhash).decode('ascii')
-        #print('p:',pwdhash)
-        #print('s:', salt+stored_password)
         return pwdhash == stored_password
     
     def sendNewUserRequest(self, username, password):
         hashedPassword= self.hash_password(password)
-        with open(path.encryption+'public_pem.pem', 'r', encoding="utf-8") as key_file:
-            public_key.encrypt(
-                ...
-            message,
-            ...
-            padding.OAEP(
-                ...
-            mgf = padding.MGF1(algorithm=hashes.SHA256()),
-                  ...
-            algorithm = hashes.SHA256(),
-                        ...
-            label = None
-                ...     )
-            ... )
         pu_key = RSA.import_key(open(path.encryption+'public_pem.pem', 'r', encoding="utf-8").read())
         cipher = PKCS1_OAEP.new(key=pu_key)
-        #print(hashedPassword)
         BhashedPassword = bytes(hashedPassword, 'utf-8')
         Busername = bytes(username, 'utf-8')
         encryHash = []
@@ -92,11 +65,7 @@ class loginModule(object):
                 
     def decryptUsername(self, encrUsername):
         try:
-            return self.decrypt.decrypt(encrUsername,
-                                        padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                                                     algorithm=hashes.SHA256(),
-                                                     label=None))
-            #return self.decrypt.decrypt(encrUsername).decode("utf-8")
+            return self.decrypt.decrypt(encrUsername).decode("utf-8")
         except Exception as e:
             #print(e)
             return None
@@ -117,7 +86,7 @@ class loginModule(object):
     def createConnection(self):
         """ create a database connection to a SQLite database """
         conn = None
-        dbFile = '//corp.hidria.com/aet/SI-TO-Izmenjava/Andrej_Mrak/ProgramData/AFM/users/usersSettings.db'
+        dbFile = path.usersDatabase + 'usersSettings.db'
         try:
             conn = sqlite3.connect(dbFile)
             #print(sqlite3.version)
@@ -145,7 +114,6 @@ class loginModule(object):
         #print(self.decryptUsername(data[0][0]))
         #print(self.decryptUsername(data[1][0]))
         for d in data:
-            
             if username == self.decryptUsername(d[0]):
                 if self.checkPassword(password, d):
                     self.username = username
@@ -155,8 +123,9 @@ class loginModule(object):
                     #print('Gelso ni pravo.')
                     return 'badPassword', None
         return 'noUser', None
-                
-logMod = loginModule()                
+
+
+logMod = loginModule()
 
 
 class Login(QtWidgets.QDialog):
@@ -217,11 +186,9 @@ class sendRequest(QtWidgets.QWidget):
     def openDialog(self):
         super().__init__()
         self.setWindowIcon(QtGui.QIcon('Graphic/Icons/windowIcon.ico'))
-        #self.loginModule = loginModule()
         self.textName = QtWidgets.QLineEdit(self)
         self.textName.setText(self.username)
         self.textPass = QtWidgets.QLineEdit(self)
-        #self.textPass.setEchoMode(QtWidgets.QLineEdit.Password)
         self.buttonReq = QtWidgets.QPushButton('Pošlji zahtevo.', self)
         self.buttonReq.clicked.connect(self.handleReq)
         layout = QtWidgets.QFormLayout(self)#QVBoxLayout(self)
@@ -261,46 +228,10 @@ class sendRequest(QtWidgets.QWidget):
             QtWidgets.QMessageBox.warning(self, 'Napaka', 'Uporabniško ime je prazno.')
         
         
-#class sendRequest(QtWidgets.QWidget):
-#    def __init__(self):
-#        self.path = "Andrej_Mrak/__Nove_Meritve/_Reports/Ideas/"
-#        
-#        
-#    def openReq(self):
-#        super().__init__()
-#        try:
-#            self.setWindowIcon(QtGui.QIcon('Graphic/Icons/Idea.png'))
-#            layout = QtWidgets.QFormLayout()
-#            tab = QtWidgets.QLabel()
-#            tab.setText('\t\t\t')
-#            napis = QtWidgets.QLabel()
-#            napis.setText('Napiši kar misliš, da bi se dalo izboljšati, dopolniti:')
-#            self.ideja = QtWidgets.QTextEdit('', self)
-#            OddajBtn = QtWidgets.QPushButton("Oddaj", self)
-#            OddajBtn.clicked.connect(self.oddaj)
-#            layout.addRow(napis)
-#            layout.addRow(self.ideja)
-#            layout.addRow(tab, OddajBtn)
-#            self.setLayout(layout)
-#            self.setWindowTitle('Oddaj idejo.')
-#            self.show()
-#        except Exception as e:
-#            print(e)
-#        
-#        
-#    def oddaj(self):
-##        file = open(self.path++'_'+strftime("%d%m")+strftime("%y")[0:2]+strftime("%H%M%S")+'.txt', 'w')
-##        file.write(self.ideja.toPlainText())#str(self.ideja.text()))
-##        file.close()
-#        message = 'Hvala.\nVaša ideja je bila oddana.'
-#        QtWidgets.QMessageBox.information(self, 'Obvestilo.', message, QtWidgets.QMessageBox.Ok, QtWidgets.QMessageBox.Ok)
-#        self.close()
-#
+
 class Window(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
-        # self.ui = Ui_MainWindow()
-        # self.ui.setupUi(self)
 
 if __name__ == '__main__':
 

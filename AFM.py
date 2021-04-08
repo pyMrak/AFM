@@ -5,9 +5,9 @@
 @author: andmra2
 """
 
-
+debug = False
 from libs.logger import newLog
-from libs import Permission#, login
+from libs import Permission, login
 from libs import GUI_module as GUI
 from libs import globalPaths
 from PyQt5.QtWidgets import QApplication, QDialog
@@ -20,12 +20,16 @@ version = 'ver2_4'
 app = QApplication(argv)
 alowed, online = Permission.check(version)
 log = None
+
 if alowed:
-    program = GUI.Main(version, online, None)
-    #log = login.Login()
-    #if log.exec_() == QDialog.Accepted:
-        #print(login.logMod.username, login.logMod.userType)
-        #program = GUI.Main(version, online, login.logMod)
+    if debug:
+        program = GUI.Main(version, online, None)
+    else:
+        log = login.Login()
+        if log.exec_() == QDialog.Accepted:
+            print("In")
+            #print(login.logMod.username, login.logMod.userType)
+            program = GUI.Main(version, online, login.logMod)
 
 else:
     zapisi = newLog(version, log)

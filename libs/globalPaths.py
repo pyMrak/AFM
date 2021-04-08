@@ -34,6 +34,7 @@ class paths():
         self.usage = self.AFM+'Usage/'
         self.settings = self.AFM+'settings/'
         self.ideas = self.AFM+'Ideas/'
+        self.usersDatabase = self.AFM + 'users/'
         
                 
                 
