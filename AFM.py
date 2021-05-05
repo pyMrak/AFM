@@ -21,22 +21,22 @@ app = QApplication(argv)
 alowed, online = Permission.check(version)
 log = None
 
-if alowed:
-    if debug:
-        program = GUI.Main(version, online, None)
-    else:
-        log = login.Login()
-        if log.exec_() == QDialog.Accepted:
-            print("In")
-            #print(login.logMod.username, login.logMod.userType)
-            program = GUI.Main(version, online, login.logMod)
+if __name__ =="__main__":
+    if alowed:
+        if debug:
+            program = GUI.Main(version, online, None)
+        else:
+            log = login.Login()
+            if log.exec_() == QDialog.Accepted:
+                #print(login.logMod.username, login.logMod.userType)
+                program = GUI.Main(version, online, login.logMod)
 
-else:
-    zapisi = newLog(version, log)
-    zapisi.writeLocation('Not alowed ', version)
-    GUI.permissionError(app, 'Verzija ' + version.replace('_', '.').strip('ver') +
-                        ' je zastarela ali pa nimate dostopa do mreže.\nNove verzije so dostopne na '+
-                        globalPaths.path.download+'.')
-sysExit(app.exec_())
+    else:
+        zapisi = newLog(version, log)
+        zapisi.writeLocation('Not alowed ', version)
+        GUI.permissionError(app, 'Verzija ' + version.replace('_', '.').strip('ver') +
+                            ' je zastarela ali pa nimate dostopa do mreže.\nNove verzije so dostopne na '+
+                            globalPaths.path.download+'.')
+    sysExit(app.exec_())
 
 

@@ -155,7 +155,7 @@ class TTreportBuilder(object):
         tables = 0
         for tableData, group in zip(self.tablesData, self.settings.groups):
             if tableData is not None:
-                if 'odpovedi' in tableData[0, -1].lower():
+                if 'odpoved' in tableData[0, -1].lower():
                     if tableData is not None:
                         if len(self.settings.groups) > 1:
                             self.createTable(document, array([tableData[:, 0], tableData[:, -1]]),

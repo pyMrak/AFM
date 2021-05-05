@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AFM_build/matplotlib/mpl-data" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AFM_build/mpl-data" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dist/AFM/matplotlib/mpl-data" vcs="Git" />
   </component>
 </project>

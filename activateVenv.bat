@@ -1,0 +1,1 @@
+C:\Users\andmra2\Desktop\Desktop\Python\venv\AFM\Scripts\activate
