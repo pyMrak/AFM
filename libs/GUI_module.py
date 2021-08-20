@@ -633,8 +633,8 @@ class TTreportWindow(QWidget):
         self.nastTT = QLabel()
         
         
-        nastRTGnr = QLabel()
-        nastRTGnr.setText('Število RTG slik v vrsti:')
+        #nastRTGnr = QLabel()
+        #nastRTGnr.setText('Število RTG slik v vrsti:')
         
         
         izvedbaL = QLabel()
@@ -696,7 +696,7 @@ class TTreportWindow(QWidget):
         self.iGroup -= 1
         self.Fbtn.setEnabled(True)
         if self.iGroup < 0:
-            self.zapriG()
+            self.zapriG(False)
             self.initialSettings()
         else:
             self.spremeniG()
@@ -732,8 +732,9 @@ class TTreportWindow(QWidget):
         self.izvedba.setText(str(self.TTreportModule.getIzvedba(group)))
         self.procedura.setText(str(self.TTreportModule.getProcedura(group)))
     
-    def zapriG(self):  
-        self.nastaviG()
+    def zapriG(self, settG=True):
+        if settG:
+            self.nastaviG()
         self.close()
         
     def naprejS(self):
