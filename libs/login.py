@@ -56,11 +56,11 @@ class loginModule(object):
             encryHash.append(cipher.encrypt(BhashedPassword[i*20:i*20+20]))
         encryUser = cipher.encrypt(Busername)
         fileName = datetime.now().strftime("%y%m%d%H%M%S")
-        with open(path.newUserRequests+fileName+'_0.req', 'wb', encoding="utf-8") as req:
+        with open(path.newUserRequests+fileName+'_0.req', 'wb') as req:
             req.write(encryUser)
         
         for i, h in enumerate(encryHash):
-            with open(path.newUserRequests+fileName+'_'+str(i+1)+'.req', 'wb', encoding="utf-8") as req:
+            with open(path.newUserRequests+fileName+'_'+str(i+1)+'.req', 'wb') as req:
                 req.write(h)
                 
     def decryptUsername(self, encrUsername):
@@ -214,14 +214,14 @@ class sendRequest(QtWidgets.QWidget):
     def handleReq(self):
         if self.textName.text() != '':
             if len(self.textPass.text()) > 3:
-                try:
+                #try:
                     logMod.sendNewUserRequest(self.textName.text(), self.textPass.text())
                     QtWidgets.QMessageBox.information(
                             self, 'Obvestilo', 'Zahteva poslana.\nProsimo počakajte da administrator potrdi vašo zahtevo.')
-                except Exception as e:
-                    QtWidgets.QMessageBox.warning(
-                            self, 'Napaka', str(e))
-                self.close()
+                # except Exception as e:
+                #     QtWidgets.QMessageBox.warning(
+                #             self, 'Napaka', str(e))
+                # self.close()
             else:
                 QtWidgets.QMessageBox.warning(self, 'Napaka', 'Geslo mora vsebovati vsaj 4 znake.')
         else:
