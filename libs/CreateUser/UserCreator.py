@@ -13,7 +13,7 @@ from os import remove, listdir
 class userCreator(object):
     
     def __init__(self):
-        self.path = '//corp.hidria.com/aet/SI-TO-Izmenjava/Andrej_Mrak/ProgramData/AFM/newUserRequests/'
+        self.path = '//10.110.8.81/AET-SI-TO-Izmenjava/Andrej_Mrak/ProgramData/AFM/newUserRequests/'
         
     def getRequestDetails(self, ID):
         pr_key = RSA.import_key(open('private_pem.pem', 'r').read())
@@ -43,7 +43,7 @@ class userCreator(object):
     def createConnection(self):
         """ create a database connection to a SQLite database """
         conn = None
-        dbFile = '//corp.hidria.com/aet/SI-TO-Izmenjava/Andrej_Mrak/ProgramData/AFM/users/usersSettings.db'
+        dbFile = '//10.110.8.81/AET-SI-TO-Izmenjava/Andrej_Mrak/ProgramData/AFM/users/usersSettings.db'
         try:
             conn = sqlite3.connect(dbFile)
             #print(sqlite3.version)
@@ -181,7 +181,7 @@ class userCreator(object):
         return rows
     
     def decryptStoredUsers(self):
-        keyFile = '//corp.hidria.com/aet/SI-TO-Izmenjava/Andrej_Mrak/ProgramData/AFM/encryption/private_pem.pem'
+        keyFile = '//10.110.8.81/AET-SI-TO-Izmenjava/Andrej_Mrak/ProgramData/AFM/encryption/private_pem.pem'
         pr_key = RSA.import_key(open(keyFile, 'r').read())
         decrypt = PKCS1_OAEP.new(key=pr_key)
         usernames = []
