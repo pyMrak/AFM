@@ -589,7 +589,8 @@ class TTreportWindow(QWidget):
         RTGrowSet = QComboBox(self)
         RTGrowSet.addItem(str(self.TTreportModule.getRTGperRow()))
         for nr in self.nrPerRow:
-            RTGrowSet.addItem(nr)
+            if nr != str(self.TTreportModule.getRTGperRow()):
+                RTGrowSet.addItem(nr)
 
         RTGrowSet.activated[str].connect(self.RTGnrPick)
             
@@ -657,6 +658,9 @@ class TTreportWindow(QWidget):
 
         self.Fbtn = QPushButton("Naprej>", self)
         self.Fbtn.clicked.connect(self.naprejG)
+        if len(self.TTreportModule.settings.groups) < 2:
+            self.Fbtn.setEnabled(False)
+
         
         OKbtn = QPushButton("OK", self)
         OKbtn.clicked.connect(self.zapriG)
@@ -753,6 +757,7 @@ class TTreportWindow(QWidget):
         self.TTreportModule.setKodaSvecke(self.koda.text())
         
         self.TTreportModule.setIzvedbaSkupno(self.sIzvedba.text())
+        saveSettings(27, str(self.TTreportModule.getRTGperRow()), self.username)
         self.close()
         
 class changeFileWindow(QWidget):

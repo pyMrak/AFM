@@ -5,7 +5,7 @@
 @author: andmra2
 """
 
-debug = False
+debug = True
 from libs.logger import newLog
 from libs import Permission, login
 from libs import GUI_module as GUI
