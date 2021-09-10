@@ -663,7 +663,7 @@ class TTreportWindow(QWidget):
 
         
         OKbtn = QPushButton("OK", self)
-        OKbtn.clicked.connect(self.zapriG)
+        OKbtn.clicked.connect(self.OKclicked)
         
         self.Bbtn = QPushButton("<Nazaj", self)
         self.Bbtn.clicked.connect(self.nazajG)
@@ -740,7 +740,10 @@ class TTreportWindow(QWidget):
         if settG:
             self.nastaviG()
         self.close()
-        
+
+    def OKclicked(self):
+        self.zapriG()
+
     def naprejS(self):
         self.closeGeneral()
         self.groupSettings()
