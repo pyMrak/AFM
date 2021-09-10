@@ -634,7 +634,7 @@ class TTreportSettings(object):
                     self.groups.append(doc)
                     self.folders.append(folder)
                 # print(doc[-7:], 'AFM.xls', doc[-7:] == 'AFM.xls')
-                if doc[-7:] == 'AFM.xls':
+                if doc[-3:] == 'AFM':
                     self.groups = [doc[:-7]]
                     self.folders = [path]
                     break
