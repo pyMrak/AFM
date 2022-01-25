@@ -309,7 +309,7 @@ class Main(QMainWindow):#QWidget):
         except Exception:
             exc_type, exc_value, exc_traceback = exc_info()
             message = 'Prišlo je do napake. Napaka bo v najkrajšem\n možnem času odpravljena. Opravičujemo se za nevšečnost.'
-            QMessageBox.error(self, 'Napaka!', message, QMessageBox.Ok, QMessageBox.Ok)
+            QMessageBox.critical(self, 'Napaka!', message, QMessageBox.Ok, QMessageBox.Ok)
             
 
             logFile = open(globalPaths.path.reports+'debug_'  + self.username + '_' + strftime("%d%m") + strftime("%y")[0:2] +strftime("%H%M%S") + '.log','w', encoding="utf-8")

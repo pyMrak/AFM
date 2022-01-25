@@ -5,7 +5,7 @@
 @author: andmra2
 """
 
-debug = True
+debug = False
 from libs.logger import newLog
 from libs import Permission, login
 from libs import GUI_module as GUI
@@ -16,7 +16,7 @@ from sys import argv
 
 
 
-version = 'ver2_4'
+version = 'ver2_5'
 app = QApplication(argv)
 alowed, online = Permission.check(version)
 log = None

@@ -5,7 +5,7 @@ from libs import globalPaths
 
 #ver = AFM.version.plit('_'[0]).strip('ver')
 compiled = r'dist\AFM'
-target = "AFM_build"#globalPaths.path.download + 'AFM'
+target = "AFM_build1"#globalPaths.path.download + 'AFM'
 
 shutil.move(compiled, target)
 

@@ -342,7 +342,7 @@ class TTreportBuilder(object):
 
         # print(minC, maxC, minX, maxX)
 
-        if len(binSpan) > 0:
+        if abs(sum(binSpan)) > 0:
             n_bins = int(round(spanC / (sum(binSpan) / len(binSpan)), 0))
             binWidth = spanC / n_bins
         else:
@@ -350,11 +350,13 @@ class TTreportBuilder(object):
             binWidth = 1
         # print(binSpan, spanC, sum(binSpan)/len(binSpan) , n_bins)
         x = linspace(minX, maxX, 1000)
-
+        yMaxPlot = 0
         for i, d in enumerate(data):
             if d is not None:
-                plt.hist(d, bins=n_bins, label=groups[i], density=True, color=colors[i],
-                         alpha=0.5, range=(minC, maxC), edgecolor=edgeColors[i], linewidth=1.2)
+                hist = plt.hist(d, bins=n_bins, label=groups[i], density=True, color=colors[i],
+                                alpha=0.5, range=(minC, maxC), edgecolor=edgeColors[i], linewidth=1.2)
+                if hist[0].max() > yMaxPlot:
+                    yMaxPlot = hist[0].max()*1.05
 
         i = 0
         for stat in stats:
@@ -367,7 +369,7 @@ class TTreportBuilder(object):
                 if i >= len(gaussColors):
                     i = 0
         i = 0
-        yMaxPlot = 0
+
         usedPositions = []
         graphSpan = maxX - minX
         for stat in stats:
@@ -402,7 +404,6 @@ class TTreportBuilder(object):
                 i += 1
                 if i >= len(fontColors):
                     i = 0
-        print('used:', usedPositions)
         plt.xlim(minX, maxX)
         plt.ylim(0, yMaxPlot)
         plt.legend()
